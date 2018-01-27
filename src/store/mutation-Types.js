@@ -1,0 +1,1 @@
+export const CHANGE_MOVIE_INFO = 'CHANGE_MOVIE_INFO'

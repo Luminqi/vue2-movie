@@ -8,3 +8,4 @@ export const getMovieInfo = () => Promise.all([
   fetch(baseurl + '/movie/upcoming', { api_key, page: '1' }),
   fetch(baseurl + '/movie/top_rated', { api_key, page: '1' })
 ])
+export const getSearchResult = (query) => fetch(baseurl + '/search/movie', { api_key, query, page: '1' })

@@ -32,14 +32,15 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+ @import '../../style/mixin';
   .head {
-    // z-index: 100;
-    // position: fixed;
-    height: 12.5rem;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    @include wh(100%, 1.5rem);
     background-color: black;
   }
   .icon {
-    width: 2.22rem;
-    height: 1.25rem;
+    @include wh(2.22rem, 1.25rem)
   }
 </style>

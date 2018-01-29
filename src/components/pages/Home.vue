@@ -1,7 +1,12 @@
 <template>
   <div class="home">
-  <Head :headlogo="true"></Head>
+  <Head :headlogo="true">
+    <span slot="title" class='home_title'>Movie</span>
+  </Head>
   <Swipe :pagination="true" type="popular"></Swipe>
+  <Swipe type="nowplaying"></Swipe>
+  <Swipe type="upcoming"></Swipe>
+  <Swipe type="toprated"></Swipe>
   <Foot></Foot>
   </div>
 </template>
@@ -29,11 +34,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+  @import '../../style/mixin';
   .home {
-    position: relative;
-  }
-  .popular {
-    position: absolute;
-    top: 12.5rem;
+    // background: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    .home_title {
+      @include sc(0.7rem, white)
+    }
   }
 </style>

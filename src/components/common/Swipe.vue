@@ -13,7 +13,6 @@
 <script>
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import { mapGetters } from 'vuex'
 export default {
   data () {
     const pagination = this.pagination
@@ -34,14 +33,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      slides: 'popular'
-    })
+    slides () {
+      return this.$store.getters[this.type]
+    }
   },
   props: {
     pagination: {
       type: Boolean,
-      default: true
+      default: false
     },
     button: {
       type: Boolean,
@@ -64,11 +63,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ @import '../../style/mixin';
   .swiper-box {
     width: 100%;
     height: 100%;
+    background: rgb(0, 0, 0);
   }
-  .swiper-item {
-   background: #fff;
+  // .swiper-item {
+  //  background: rgb(0, 0, 0);
+  // }
+  .nowplaying, .upcoming, .toprated {
+    img {
+      @include wh(92px, 138px);
+    }
   }
 </style>

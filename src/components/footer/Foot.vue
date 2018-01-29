@@ -1,16 +1,20 @@
 <template>
   <footer class="foot">
     <section class="foot_item">
-      <Icon name='movie'></Icon>
-      <span>Movie</span>
+      <router-link to="/" tag="div">
+        <Icon name='movie'></Icon>
+        <span>Movie</span>
+      </router-link>
     </section>
     <section class="foot_item">
       <Icon name='tv'></Icon>
       <span>TV</span>
     </section>
     <section class="foot_item">
-      <Icon name='search'></Icon>
-      <span>Search</span>
+      <router-link to="/search" tag="div">
+        <Icon name='search'></Icon>
+        <span>Search</span>
+      </router-link>
     </section>
     <section class="foot_item">
       <Icon name='user'></Icon>
@@ -33,6 +37,7 @@ export default {
   .foot {
     background-color: black;
     position: fixed;
+    bottom: 0;
     z-index: 100;
     @include wh(100%, 1.5rem);
     padding: 0.25rem 0 0.1875rem;

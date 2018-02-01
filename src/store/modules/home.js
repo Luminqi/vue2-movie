@@ -17,28 +17,32 @@ export default {
       .map(item => ({
         path: imgurl('w300', item.backdrop_path),
         id: item.id,
-        title: item.title
+        title: item.title,
+        date: item.release_date
       })),
     nowplaying: state => state.movieinfo.nowplaying
       .filter(item => item.poster_path !== null)
       .map(item => ({
         path: imgurl('w92', item.poster_path),
         id: item.id,
-        title: item.title
+        title: item.title,
+        date: item.release_date
       })),
     upcoming: state => state.movieinfo.upcoming
       .filter(item => item.poster_path !== null)
       .map(item => ({
         path: imgurl('w92', item.poster_path),
         id: item.id,
-        title: item.title
+        title: item.title,
+        date: item.release_date
       })),
     toprated: state => state.movieinfo.toprated
       .filter(item => item.poster_path !== null)
       .map(item => ({
         path: imgurl('w92', item.poster_path),
         id: item.id,
-        title: item.title
+        title: item.title,
+        date: item.release_date
       }))
   },
   mutations: {

@@ -16,26 +16,50 @@
         <span>Search</span>
       </router-link>
     </section>
-    <section class="foot_item">
+    <section class="foot_item" @click="judgeLoginState">
       <Icon name='user'></Icon>
       <span>My TMDb</span>
     </section>
+    <MessageBox v-if="nologin"/>
   </footer>
 </template>
 
 <script>
 import Icon from '../common/Icon'
+import MessageBox from '../common/MessageBox'
+import { mapState } from 'vuex'
 export default {
+  data () {
+    return {
+      nologin: false
+    }
+  },
+  computed: {
+    ...mapState({
+      accesstoken: state => state.account.accesstoken
+    })
+  },
   components: {
-    Icon
+    Icon,
+    MessageBox
+  },
+  methods: {
+    judgeLoginState () {
+      this.accesstoken
+        ? this.$router.push('/account')
+        : this.nologin = true
+    }
   }
+
 }
 </script>
 
 <style lang='scss' scoped>
   @import '../../style/mixin';
   .foot {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
     position: fixed;
     bottom: 0;
     z-index: 100;

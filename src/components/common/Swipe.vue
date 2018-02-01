@@ -1,7 +1,9 @@
 <template>
-  <swiper :options="swiperOption" class="swiper-box" :class="type">
+  <swiper :options="swiperOption" class="swiper-box" :class="type" v-if="slides.length">
     <swiper-slide v-for="item in slides" :key="item.id" class="swiper-item">
-       <img :src="item.path" alt="">
+      <router-link :to="'/movie/' + item.id">
+        <img :src="item.path" alt="">
+      </router-link>
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination" v-if="pagination"></div>
     <div class="swiper-button-prev" slot="button-prev" v-if="button"></div>
@@ -34,7 +36,7 @@ export default {
   },
   computed: {
     slides () {
-      return this.$store.getters[this.type]
+      return this.$store.getters[this.type] || this.$store.state.detail.moviedetail[this.type]
     }
   },
   props: {

@@ -20,6 +20,7 @@ export default {
       required: true
     }
   },
+  // props: ['rating'],
   components: {
     Icon
   }

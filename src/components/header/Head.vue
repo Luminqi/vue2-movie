@@ -1,7 +1,7 @@
 <template>
   <header class="head">
     <Icon name='logo' v-if="headlogo" @click.native="reload"></Icon>
-    <Icon name='back' v-if="headback" @click.native="$router.go(-1)"></Icon>
+    <Icon name='goback' v-if="headback" @click.native="$router.go(-1)"></Icon>
     <slot name='title'></slot>
     <slot name='rightside'></slot>
   </header>
@@ -38,9 +38,14 @@ export default {
     top: 0;
     z-index: 100;
     @include wh(100%, 1.5rem);
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
   }
   .icon {
-    @include wh(2.22rem, 1.25rem)
+    @include wh(2.22rem, 1.25rem);
+  }
+  .icon_goback {
+    fill: white;
   }
 </style>

@@ -14,12 +14,15 @@ const formatData = (data) => {
   const poster = imgurl('w92', data.poster_path)
   const backdrop = imgurl('w300', data.backdrop_path)
   const cast = data.credits.cast.map(item => ({
-    id: item.id,
+    id: item.credit_id,
+    person_id: item.id,
     name: item.name,
+    character: item.character,
     path: imgurl('w45', item.profile_path)
   }))
   const crew = data.credits.crew.map(item => ({
     id: item.credit_id,
+    person_id: item.id,
     name: item.name,
     job: item.job,
     path: imgurl('w45', item.profile_path)

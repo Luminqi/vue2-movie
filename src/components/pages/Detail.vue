@@ -49,6 +49,12 @@ export default {
   },
   created () {
     this.changeDetail(this.$route.params.id)
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (to.params.id !== from.params.id) {
+      this.changeDetail(to.params.id)
+    }
+    next()
   }
 }
 </script>

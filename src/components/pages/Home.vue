@@ -4,9 +4,18 @@
     <span slot="title" class='home_title'>Movie</span>
   </Head>
   <Swipe :pagination="true" type="popular"></Swipe>
-  <Swipe type="nowplaying"></Swipe>
-  <Swipe type="upcoming"></Swipe>
-  <Swipe type="toprated"></Swipe>
+  <div class="swipe_container">
+    <p class="swipe_title">Now Playing</p>
+    <Swipe type="nowplaying"></Swipe>
+  </div>
+  <div class="swipe_container">
+    <p class="swipe_title">Upcoming</p>
+    <Swipe type="upcoming"></Swipe>
+  </div>
+  <div class="swipe_container">
+    <p class="swipe_title">Top Rated</p>
+    <Swipe type="toprated"></Swipe>
+  </div>
   <Foot></Foot>
   </div>
 </template>
@@ -36,11 +45,23 @@ export default {
 <style lang='scss' scoped>
   @import '../../style/mixin';
   .home {
-    // background: rgb(0, 0, 0);
+    margin-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    background-color: rgb(12, 12, 12);
     display: flex;
     flex-direction: column;
     .home_title {
-      @include sc(0.7rem, white)
+      @include sc(0.7rem, white);
+      @include center;
     }
+  }
+  .swipe_container {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #5a5656;
+  }
+  .swipe_title {
+    @include sc(0.5rem, white);
+    margin-bottom: 0 0 0.2rem;
+    padding: 0;
   }
 </style>

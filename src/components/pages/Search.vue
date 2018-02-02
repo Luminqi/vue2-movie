@@ -3,11 +3,15 @@
     <Head>
       <span slot="title" class="search_title">Search</span>
     </Head>
-    <input type="text" v-model="search" class="search_input" />
+    <div class="input_container">
+      <input type="text" placeholder=" Search Movie" v-model="search" class="search_input" />
+    </div>
     <ul class="search_list">
       <li v-for="item in results" :key="item.id" class="search_item">
         <img :src="item.path" v-if="item.path" class="item_pic">
-        <Icon name="picture" v-else class="default_pic"></Icon>
+        <div class="default_pic_container" v-else>
+          <Icon name="picture"  class="default_pic"></Icon>
+        </div>
         <div class="info_container">
           <p>{{ item.title }}</p>
           <p>{{ item.release_date }}</p>
@@ -100,28 +104,49 @@ export default {
     flex-direction: column;
     .search_title {
       @include sc(0.7rem, white);
+      @include center;
     }
-    .search_input {
+    .input_container {
+      @include wh(100%, 1.2rem);
+      @include cl;
+      background-color: #443d3d;
+      padding: 0.2rem 0.3rem;
       margin-top: 1.5rem;
       position: fixed;
+      .search_input {
+        @include wh(15rem, 0.8rem);
+        @include center;
+        @include borderRadius(0.3rem);
+        @include plc(#666);
+        color: white;
+        background-color: #141313;
+        border: none;
+      }
     }
-    .search_item {
-      display: flex;
-      margin-bottom: 1.5rem;
-      .default_pic, .item_pic {
-        @include wh(92px, 138px)
-      }
-      .default_pic {
-        fill: rgb(170, 170, 170);
-      }
-      .info_container {
+    .search_list {
+      margin-top: 3.5rem;
+      .search_item {
         display: flex;
-        flex-direction: column;
-        @include sc(0.4rem, white);
+        margin-bottom: 1.5rem;
+        .default_pic_container, .item_pic {
+          @include wh(2.95rem, 4.4231rem);
+        }
+        .default_pic_container {
+          position: relative;
+          background-color: #443d3d;
+        }
+        .default_pic {
+          @include wh(.8rem, .8rem);
+          @include center;
+          fill: rgb(170, 170, 170);
+        }
+        .info_container {
+          display: flex;
+          flex-direction: column;
+          @include sc(0.4rem, white);
+        }
       }
     }
   }
-  .search_list {
-    margin-top: 2.5rem;
-  }
+
 </style>

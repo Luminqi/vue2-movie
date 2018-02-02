@@ -1,10 +1,10 @@
 <template>
   <div class="box_container">
-    <div v-if="appear" class="msg_container">
+    <div class="msg_container">
       <span class="msg_title">{{ title }}</span>
       <p class="msg_content">{{ message }}</p>
       <button @click="cancel" class="msg_button_cancel">Cancel</button>
-      <button @click="login" class="msg_button_login">Login</button>
+      <button @click="login($route.path)" class="msg_button_login">Login</button>
     </div>
   </div>
 </template>
@@ -12,11 +12,6 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  data () {
-    return {
-      appear: true
-    }
-  },
   props: {
     title: {
       type: String,
@@ -29,7 +24,7 @@ export default {
   },
   methods: {
     cancel () {
-      this.appear = false
+      this.$emit('closeMsg')
     },
     ...mapActions({
       login: 'changeRequestToken'

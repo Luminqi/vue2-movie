@@ -64,3 +64,19 @@
 	justify-content: $type;
 
 }
+
+//placeholder
+@mixin plc($color) {
+	input::-webkit-input-placeholder {
+		color: $color;
+	}
+	input:-moz-placeholder {
+		color: $color;
+	}
+	input::-moz-placeholder {
+		color: $color;
+	}
+	input:-ms-input-placeholder {
+    color: $color;
+	}
+}

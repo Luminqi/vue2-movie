@@ -1,7 +1,7 @@
 <template>
   <footer class="foot">
     <section class="foot_item">
-      <router-link to="/" tag="div">
+      <router-link to="/" tag="div" class="route_link_container">
         <Icon name='movie'></Icon>
         <span>Movie</span>
       </router-link>
@@ -11,7 +11,7 @@
       <span>TV</span>
     </section>
     <section class="foot_item">
-      <router-link to="/search" tag="div">
+      <router-link to="/search" tag="div" class="route_link_container">
         <Icon name='search'></Icon>
         <span>Search</span>
       </router-link>
@@ -20,7 +20,7 @@
       <Icon name='user'></Icon>
       <span>My TMDb</span>
     </section>
-    <MessageBox v-if="nologin"/>
+    <MessageBox v-if="loginstate" @closeMsg="doclose"/>
   </footer>
 </template>
 
@@ -31,7 +31,7 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      nologin: false
+      loginstate: false
     }
   },
   computed: {
@@ -47,7 +47,10 @@ export default {
     judgeLoginState () {
       this.accesstoken
         ? this.$router.push('/account')
-        : this.nologin = true
+        : this.loginstate = true
+    },
+    doclose () {
+      this.loginstate = false
     }
   }
 
@@ -82,7 +85,15 @@ export default {
       @include wh(0.95rem, 0.95rem);
     }
     span{
-      @include sc(.45rem, #666);
+      @include sc(.4rem, #666);
     }
+  }
+  .route_link_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.08rem;
+    padding: 0;
   }
 </style>

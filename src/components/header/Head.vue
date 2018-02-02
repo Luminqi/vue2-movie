@@ -1,7 +1,7 @@
 <template>
   <header class="head">
     <Icon name='logo' v-if="headlogo" @click.native="reload"></Icon>
-    <Icon name='goback' v-if="headback" @click.native="$router.go(-1)"></Icon>
+    <Icon name='goback' v-if="headback" @click.native="goback"></Icon>
     <slot name='title'></slot>
     <slot name='rightside'></slot>
   </header>
@@ -9,9 +9,16 @@
 
 <script>
 import Icon from '../common/Icon'
+import { CHANGE_START_PATH } from '../../store/mutation-Types'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     Icon
+  },
+  computed: {
+    ...mapState({
+      startPath: state => state.account.startpath
+    })
   },
   props: {
     headlogo: {
@@ -24,8 +31,19 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      changeStartPath: CHANGE_START_PATH
+    }),
     reload () {
       window.location.reload()
+    },
+    goback () {
+      if (this.startPath) {
+        this.$router.push(this.startPath)
+        this.changeStartPath({ startpath: '' })
+      } else {
+        this.$router.go(-1)
+      }
     }
   }
 }
@@ -43,7 +61,11 @@ export default {
     backdrop-filter: blur(15px);
   }
   .icon {
-    @include wh(2.22rem, 1.25rem);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    @include wh(2.5rem, 1.3rem);
   }
   .icon_goback {
     fill: white;

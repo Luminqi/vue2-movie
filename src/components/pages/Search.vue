@@ -7,16 +7,17 @@
       <input type="text" placeholder=" Search Movie" v-model="search" class="search_input" />
     </div>
     <ul class="search_list">
-      <li v-for="item in results" :key="item.id" class="search_item">
+      <li v-for="item in results" :key="item.id" class="search_item" @click="$router.push('/movie/' + item.id)">
         <img :src="item.path" v-if="item.path" class="item_pic">
         <div class="default_pic_container" v-else>
-          <Icon name="picture"  class="default_pic"></Icon>
+          <Icon name="picture" class="default_pic"></Icon>
         </div>
         <div class="info_container">
-          <p>{{ item.title }}</p>
-          <p>{{ item.release_date }}</p>
-          <Star :rating="item.vote_average"></Star>
-          <span>({{ item.vote_average }}, {{ item.vote_count }} )</span>
+          <p class="info_title">{{ item.title }}</p>
+          <p class="info_date">{{ item.release_date }}</p>
+          <Star :rating="item.vote_average" class="info_star"></Star>
+          <span v-if="item.vote_count" class="info_vote">({{ item.vote_average }}, {{ item.vote_count }} )</span>
+          <span v-else class="info_vote">Not Rated</span>
         </div>
       </li>
     </ul>
@@ -100,8 +101,8 @@ export default {
 <style lang="scss" scoped>
   @import '../../style/mixin';
   .search {
-    display: flex;
-    flex-direction: column;
+    margin-top: 1.5rem;
+    padding-bottom: 1.5rem;
     .search_title {
       @include sc(0.7rem, white);
       @include center;
@@ -111,8 +112,8 @@ export default {
       @include cl;
       background-color: #443d3d;
       padding: 0.2rem 0.3rem;
-      margin-top: 1.5rem;
       position: fixed;
+      top: 1.5rem;
       .search_input {
         @include wh(15rem, 0.8rem);
         @include center;
@@ -141,9 +142,25 @@ export default {
           fill: rgb(170, 170, 170);
         }
         .info_container {
+          margin-left: 1.5rem;
           display: flex;
           flex-direction: column;
-          @include sc(0.4rem, white);
+          justify-content: center;
+          .info_title {
+            @include sc(0.3rem, white);
+            padding: 0;
+            margin: 0
+          }
+          .info_date {
+            @include sc(0.2rem, #666);
+            padding: 0;
+            margin: 0.3rem 0;
+          }
+          .info_vote {
+            @include sc(0.2rem, #666);
+            padding: 0;
+            margin: 0
+          }
         }
       }
     }

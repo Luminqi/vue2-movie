@@ -3,8 +3,10 @@
     <div class="msg_container">
       <span class="msg_title">{{ title }}</span>
       <p class="msg_content">{{ message }}</p>
-      <button @click="cancel" class="msg_button_cancel">Cancel</button>
-      <button @click="login($route.path)" class="msg_button_login">Login</button>
+      <div class="msg_button_container">
+        <button @click="cancel" class="msg_button_cancel">Cancel</button>
+        <button @click="login($route.path)" class="msg_button_login">Login</button>
+      </div>
     </div>
   </div>
 </template>
@@ -44,8 +46,24 @@ export default {
     z-index: 200;
   }
   .msg_container {
+    @include wh(11.5385rem, 7.6923rem);
+    padding: 20px;
+    box-sizing: border-box;
     @include center;
     background-color: rgba(255,255,255,1);
     border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    .msg_title {
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .msg_content {
+      font-size: 0.5rem;
+      text-align: justify;
+    }
   }
 </style>

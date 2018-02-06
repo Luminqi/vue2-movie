@@ -69,5 +69,6 @@ export default {
   }
   .icon_goback {
     fill: white;
+    @include wh(1rem, 1rem);
   }
 </style>

@@ -1,19 +1,27 @@
 <template>
   <swiper :options="swiperOption" class="swiper-box" :class="type" v-if="slides.length">
-    <swiper-slide v-for="item in slides" :key="item.id" class="swiper-item" v-if="judgeType">
-      <router-link :to="'/movie/' + item.id" tag='div' class= 'swiper-item-container' :class="type">
-        <img :src="item.path" alt=""/>
-        <p class="swiper-item-title" :class="type">{{ item.title }}</p>
+    <swiper-slide v-for="item in slides" :key="item.id" class="swiper-item">
+      <div class="swiper-item-container" :class="'swiper-item-container-' + type" v-if="type === 'trailers'">
+        <video class="trailers_video" :src="'https://www.youtube.com/embed/' + item.path" controls="controls" />
+        <span class="swiper-item-desc">{{ item.name }}</span>
+      </div>
+      <router-link :to="'/movie/' + item.id" tag='div' class= 'swiper-item-container' :class="'swiper-item-container-' + type" v-else-if="judgeType">
+        <img :src="item.path" v-if="item.path"/>
+        <div class="default_pic_container" v-else>
+          <Icon name="picture" class="default_pic"></Icon>
+        </div>
+        <p class="swiper-item-title" :class="'swiper-item-title-' + type">{{ item.title }}</p>
         <p class="swiper-item-desc" v-if="type !== 'popular'">{{ item.date }}</p>
       </router-link>
-    </swiper-slide>
-    <swiper-slide v-for="item in slides" :key="item.id" class="swiper-item" v-else>
-      <router-link :to="'/person/' + item.person_id" tag='div'>
-        <img :src="item.path" alt=""/>
+      <router-link :to="'/person/' + item.person_id" tag='div' class= 'swiper-item-container' :class="'swiper-item-container-' + type" v-else>
+        <img :src="item.path" v-if="item.path"/>
+        <div class="default_pic_container" v-else>
+          <Icon name="picture" class="default_pic"></Icon>
+        </div>
+        <p class="swiper-item-title">{{ item.name }}</p>
+        <p v-if="type === 'cast'" class="swiper-item-desc">{{ item.character }}</p>
+        <p v-else class="swiper-item-desc">{{ item.job }}</p>
       </router-link>
-      <p class="swiper-item-title">{{ item.name }}</p>
-      <p v-if="type === 'cast'" class="swiper-item-desc">{{ item.character }}</p>
-      <p v-else class="swiper-item-desc">{{ item.job }}</p>
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination" v-if="pagination"></div>
     <div class="swiper-button-prev" slot="button-prev" v-if="button"></div>
@@ -23,6 +31,7 @@
 </template>
 
 <script>
+import Icon from '../common/Icon'
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
@@ -31,7 +40,7 @@ export default {
       ? {el: '.swiper-pagination', dynamicBullets: true}
       : {el: ''}
     const spaceBetween = this.type === 'popular' ? 0 : 10
-    const slidesPerView = this.type === 'popular' ? 1 : 4
+    const slidesPerView = (this.type === 'popular' || this.type === 'trailers') ? 1 : 4
     const loop = this.type === 'popular'
     const autoplay = this.type === 'popular'
     return {
@@ -49,7 +58,7 @@ export default {
       return this.$store.getters[this.type] || this.$store.state.detail.moviedetail[this.type]
     },
     judgeType () {
-      return this.type !== 'cast' && this.type !== 'crew'
+      return this.type !== 'cast' && this.type !== 'crew' && this.type !== 'trailers'
     }
   },
   props: {
@@ -72,7 +81,8 @@ export default {
   },
   components: {
     swiper,
-    swiperSlide
+    swiperSlide,
+    Icon
   }
 }
 </script>
@@ -83,9 +93,18 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .nowplaying, .upcoming, .toprated, .cast, .crew {
-    img {
+  .nowplaying, .upcoming, .toprated, .cast, .crew, .similar {
+    img, .default_pic_container {
       @include wh(2.95rem, 4.4231rem);
+    }
+    .default_pic_container {
+      position: relative;
+      background-color: #443d3d;
+    }
+    .default_pic {
+      @include wh(.8rem, .8rem);
+      @include center;
+      fill: rgb(170, 170, 170);
     }
   }
   .swiper-item-container {
@@ -104,7 +123,7 @@ export default {
       white-space: nowrap;
       @include sc(0.2rem, #fff);
     }
-    .popular {
+    .swiper-item-title-popular {
       width: auto;
       background-color: rgba(0, 0, 0, 0.8);
       position: absolute;
@@ -127,8 +146,17 @@ export default {
       @include sc(0.2rem, #666)
     }
   }
-  .swiper-item-container.popular {
+  .swiper-item-container-popular {
     align-items: center;
     padding-left: 0;
   }
+  .swiper-item-container-trailers {
+    .trailers_video {
+      @include wh(14.6154rem, 8.2308rem);
+    }
+    .swiper-item-desc {
+      width: 14.6154rem
+    }
+  }
+
 </style>

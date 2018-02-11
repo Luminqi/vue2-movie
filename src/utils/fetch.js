@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async (url = '', data = {}, type = 'get', header = {}) => {
   type = type.toLowerCase()
-  if (type === 'get') {
+  if (type === 'get' || type === 'delete') {
     let dataStr = ''
     Object.keys(data).forEach(key => {
       dataStr += key + '=' + data[key] + '&'

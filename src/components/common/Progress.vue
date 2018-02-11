@@ -67,18 +67,29 @@ export default {
       }
     }
   },
-  watch: {
-    degree (newValue, oldValue) {
-      let vm = this
-      autoPlay(true)
-      new Tween({ tweenOffset: vm.perimeter })
-        .to({ tweenOffset: newValue })
-        .easing(Easing.Quadratic.InOut)
-        .on('update', ({ tweenOffset }) => {
-          vm.offset = tweenOffset
-        })
-        .start()
-    }
+  // watch: {
+  //   degree (newValue, oldValue) {
+  //     let vm = this
+  //     autoPlay(true)
+  //     new Tween({ tweenOffset: vm.perimeter })
+  //       .to({ tweenOffset: newValue })
+  //       .easing(Easing.Quadratic.InOut)
+  //       .on('update', ({ tweenOffset }) => {
+  //         vm.offset = tweenOffset
+  //       })
+  //       .start()
+  //   }
+  // },
+  mounted () {
+    let vm = this
+    autoPlay(true)
+    new Tween({ tweenOffset: vm.perimeter })
+      .to({ tweenOffset: vm.degree })
+      .easing(Easing.Quadratic.InOut)
+      .on('update', ({ tweenOffset }) => {
+        vm.offset = tweenOffset
+      })
+      .start()
   }
 }
 </script>

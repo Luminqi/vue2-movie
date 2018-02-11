@@ -1,14 +1,14 @@
 import { MODIFY_REQUEST_TOKEN, MODIFY_ACCESS_TOKEN, MODIFY_ACCOUNT_ID,
   CHANGE_ACCOUNT_INFO, CHANGE_START_PATH, MODIFY_REQUEST_TOKEN_V3,
   MODIFY_SESSION_ID, ADD_FAVORITE_MOVIE, REMOVE_FAVORITE_MOVIE,
-  ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE
+  ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE, ADD_RATED_MOVIE, DELETE_RATED_MOVIE
 } from '../mutation-Types'
 import { createRequestToken, createAccessToken, getUserInfo, createRequestTokenV3, createSessionId } from '../../utils/getData'
 import { setStore } from '../../utils/storage'
 import { imgurl } from '../../utils/imgurl'
 const formatUserInfo = (res) => {
   let data = res.map(item => item.results)
-  let [lists, favorites, recommendations, watchlist] = data
+  let [lists, favorites, recommendations, watchlist, rated] = data
   lists = lists.map(item => ({
     path: imgurl('w300', item.backdrop_path),
     // list id
@@ -44,7 +44,15 @@ const formatUserInfo = (res) => {
     vote_average: item.vote_average,
     vote_count: item.vote_count
   }))
-  return { lists, favorites, recommendations, watchlist }
+  rated = rated.map(item => ({
+    id: item.id,
+    path: imgurl('w92', item.poster_path),
+    title: item.title,
+    release_date: item.release_date,
+    rating: item.account_rating.value
+    // rating_date: item.account_rating.created_at
+  }))
+  return { lists, favorites, recommendations, watchlist, rated }
 }
 
 export default {
@@ -58,6 +66,7 @@ export default {
     lists: [],
     recommendations: [],
     watchlist: [],
+    rated: [],
     startpath: ''
   },
   mutations: {
@@ -81,6 +90,7 @@ export default {
       state.lists = payload.lists
       state.recommendations = payload.recommendations
       state.watchlist = payload.watchlist
+      state.rated = payload.rated
       // state = { ...state, ...payload }
       console.log(state, payload)
     },
@@ -98,6 +108,12 @@ export default {
     },
     [REMOVE_WATCHLIST_MOVIE] (state, payload) {
       state.watchlist = state.watchlist.filter(item => item.id !== payload.id)
+    },
+    [ADD_RATED_MOVIE] (state, payload) {
+      state.rated.push(payload)
+    },
+    [DELETE_RATED_MOVIE] (state, payload) {
+      state.rated = state.rated.filter(item => item.id !== payload.id)
     }
   },
   actions: {

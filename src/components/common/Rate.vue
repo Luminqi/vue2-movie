@@ -9,7 +9,7 @@ import Icon from './Icon'
 export default {
   data () {
     return {
-      currentValue: 0
+      currentValue: this.rating
     }
   },
   components: {
@@ -19,6 +19,10 @@ export default {
     max: {
       type: Number,
       required: true
+    },
+    rating: {
+      type: Number,
+      default: 0
     }
   },
   methods: {
@@ -30,6 +34,9 @@ export default {
     },
     initialValue () {
       this.currentValue = 0
+    },
+    getCurValue () {
+      return this.currentValue
     }
   }
 }

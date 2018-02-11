@@ -32,7 +32,7 @@
       <p>{{ this.msgContent }}</p>
     </div>
     <div slot="content" v-if="activeRate">
-      <Rate :max="5" ref="rateStar"></Rate>
+      <Rate :max="5" :rating="rating" ref="rateStar"></Rate>
     </div>
     <div slot="customBtn" v-if="accessToken">
       <button @click="cancel">Cancel</button>
@@ -47,8 +47,8 @@ import Icon from './Icon'
 import MessageBox from './MessageBox'
 import Rate from './Rate'
 import { mapState, mapMutations } from 'vuex'
-import { addToFavorite, removeFromFavorite, addToWatchlist, removeFromWatchlist } from '../../utils/getData'
-import { ADD_FAVORITE_MOVIE, REMOVE_FAVORITE_MOVIE, ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE } from '../../store/mutation-Types'
+import { addToFavorite, removeFromFavorite, addToWatchlist, removeFromWatchlist, rateMovie, deleteRating } from '../../utils/getData'
+import { ADD_FAVORITE_MOVIE, REMOVE_FAVORITE_MOVIE, ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE, ADD_RATED_MOVIE, DELETE_RATED_MOVIE } from '../../store/mutation-Types'
 export default {
   data () {
     return {
@@ -59,7 +59,8 @@ export default {
       favorIconStyle: {},
       favorCircleStyle: {},
       wlistIconStyle: {},
-      wlistCircleStyle: {}
+      wlistCircleStyle: {},
+      rating: 0
     }
   },
   components: {
@@ -73,6 +74,7 @@ export default {
       sessionId: state => state.account.sessionid,
       favorMovieIds: state => state.account.favorites.map(item => item.id),
       watchlistIds: state => state.account.watchlist.map(item => item.id),
+      ratedMovie: state => state.account.rated,
       movieDetail: state => state.detail.moviedetail
     }),
     briefMovieDetail () {
@@ -108,7 +110,9 @@ export default {
       addFavoriteMovie: ADD_FAVORITE_MOVIE,
       removeFavoriteMovie: REMOVE_FAVORITE_MOVIE,
       addWatchlistMovie: ADD_WATCHLIST_MOVIE,
-      removeWatchlistMovie: REMOVE_WATCHLIST_MOVIE
+      removeWatchlistMovie: REMOVE_WATCHLIST_MOVIE,
+      addRatedMovie: ADD_RATED_MOVIE,
+      deleteRatedMovie: DELETE_RATED_MOVIE
     }),
     getCircleStyle (mark) {
       return this.clickedElm === mark ? { fill: '#fff' } : { fill: 'none' }
@@ -198,6 +202,22 @@ export default {
     },
     submit () {
       this.showMsg = false
+      if (this.activeRate) {
+        let value = this.$refs.rateStar.getCurValue()
+        rateMovie(this.sessionId, this.movieDetail.id, value).then(
+          () => {
+            // eslint-disable-next-line
+            const { id, path, title, release_date } = this.briefMovieDetail
+            this.addRatedMovie({
+              id,
+              path,
+              title,
+              release_date,
+              rating: value
+            })
+          }
+        )
+      }
     },
     initialStyle () {
       if (this.favorMovieIds.includes(this.movieDetail.id)) {
@@ -213,6 +233,11 @@ export default {
       } else {
         this.wlistIconStyle = { fill: '#fff', width: '0.6154rem', height: '0.6154rem' }
         this.wlistCircleStyle = { fill: 'none' }
+      }
+      if (this.ratedMovie.map(item => item.id).includes(this.movieDetail.id)) {
+        this.rating = this.ratedMovie.filter(item => item.id === this.movieDetail.id)[0].rating / 2
+      } else {
+        this.rating = 0
       }
     }
   },

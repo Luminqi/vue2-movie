@@ -35,7 +35,8 @@ export const getUserInfo = (accountId, accessToken) => Promise.all([
   fetch(baseurl_v4 + '/account/' + accountId + '/lists', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken }),
   fetch(baseurl_v4 + '/account/' + accountId + '/movie/favorites', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken }),
   fetch(baseurl_v4 + '/account/' + accountId + '/movie/recommendations', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken }),
-  fetch(baseurl_v4 + '/account/' + accountId + '/movie/watchlist', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken })
+  fetch(baseurl_v4 + '/account/' + accountId + '/movie/watchlist', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken }),
+  fetch(baseurl_v4 + '/account/' + accountId + '/movie/rated', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken })
 ])
 
 export const addToFavorite = (session_id, media_type, media_id) => fetch(
@@ -74,3 +75,17 @@ export const removeFromWatchlist = (session_id, media_type, media_id) => fetch(
   },
   'post'
 )
+
+export const rateMovie = (session_id, movie_id, value) => fetch(
+  baseurl + `/movie/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+  {
+    value
+  },
+  'post'
+)
+
+export const deleteRating = (session_id, movie_id) => fetch(
+  baseurl + `/movie/${movie_id}/rating`,
+  { api_key, session_id},
+  'delete'
+) 

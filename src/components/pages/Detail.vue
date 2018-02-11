@@ -17,7 +17,7 @@
           <span v-if="movie.vote_count" class="brief_vote">({{ movie.vote_average }}, {{ movie.vote_count }} )</span>
           <span v-else class="brief_vote">Not Rated</span>
         </div>
-        <Progress :percentage="movie.vote_average * 10" :width="60" :strokeWidth="6" class="detail_progress"></Progress>
+        <Progress :percentage="movie.vote_average * 10" :width="60" :strokeWidth="6" class="detail_progress" v-if="finishGetDetail"></Progress>
       </div>
       <MarkBundle :dominantColor="dominantColor" class="detail_mark" v-if="showMarkBundle"></MarkBundle>
     </section>
@@ -47,7 +47,8 @@ export default {
       lazyloaded: false,
       radialimg: '',
       dominantColor: '#ff8800',
-      showMarkBundle: false
+      showMarkBundle: false,
+      finishGetDetail: false
     }
   },
   computed: {
@@ -127,12 +128,24 @@ export default {
     console.log('from create')
     this.getDetailAndPalette(this.$route.params.id).then(() => {
       this.lazyloaded = true
+      this.finishGetDetail = true
     })
   },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log('from beforeRouteLeave')
+  //   this.lazyloaded = false
+  //   this.finishGetDetail = false
+  //   next()
+  // },
   beforeRouteUpdate (to, from, next) {
     console.log('from beforerouteUpdate')
     if (to.params.id !== from.params.id) {
-      this.getDetailAndPalette(to.params.id)
+      this.lazyloaded = false
+      this.finishGetDetail = false
+      this.getDetailAndPalette(to.params.id).then(() => {
+        this.lazyloaded = true
+        this.finishGetDetail = true
+      })
     }
     next()
   }

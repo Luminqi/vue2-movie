@@ -17,14 +17,15 @@
           <span v-if="movie.vote_count" class="brief_vote">({{ movie.vote_average }}, {{ movie.vote_count }} )</span>
           <span v-else class="brief_vote">Not Rated</span>
         </div>
-        <Progress :percentage="movie.vote_average * 10" :width="80" :strokeWidth="8" class="detail_progress"></Progress>
+        <Progress :percentage="movie.vote_average * 10" :width="60" :strokeWidth="6" class="detail_progress"></Progress>
       </div>
+      <MarkBundle :dominantColor="dominantColor" class="detail_mark" v-if="showMarkBundle"></MarkBundle>
     </section>
     <section class="detail_nav">
       <div class="detail_nav_container">
-        <button @click="changeNav('/overview')" class="detial_button overview">Overview</button>
-        <button @click="changeNav('/people')" class="detial_button people">People</button>
-        <button @click="changeNav('/similar')" class="detial_button similar">Similar</button>
+        <div @click="changeNav('/overview')" class="detial_button overview" :style="($route.name === 'Default' || $route.name === 'Overview') ? { borderBottomColor:  dominantColor } : { borderBottomColor: '#232323' }">Overview</div>
+        <div @click="changeNav('/people')" class="detial_button people" :style="$route.name === 'People'  ? { borderBottomColor:  dominantColor } : { borderBottomColor: '#232323' }">People</div>
+        <div @click="changeNav('/similar')" class="detial_button similar" :style="$route.name === 'Similar'  ? { borderBottomColor:  dominantColor } : { borderBottomColor: '#232323' }">Similar</div>
       </div>
     </section>
     <router-view></router-view>
@@ -37,13 +38,16 @@ import Head from '../header/Head'
 import Foot from '../footer/Foot'
 import Star from '../common/Star'
 import Progress from '../common/Progress'
+import MarkBundle from '../common/MarkBundle'
 import { mapState, mapActions } from 'vuex'
 import * as Vibrant from 'node-vibrant'
 export default {
   data () {
     return {
       lazyloaded: false,
-      radialimg: ''
+      radialimg: '',
+      dominantColor: '#ff8800',
+      showMarkBundle: false
     }
   },
   computed: {
@@ -58,7 +62,8 @@ export default {
     Head,
     Foot,
     Star,
-    Progress
+    Progress,
+    MarkBundle
   },
   methods: {
     changeNav (nav) {
@@ -70,6 +75,7 @@ export default {
     async getDetailAndPalette (movieId) {
       try {
         await this.changeDetail(movieId)
+        this.showMarkBundle = true
         console.log(this.movie.backdrop)
         let palette = await Vibrant.from(this.movie.poster).getPalette()
         console.log(palette)
@@ -88,6 +94,7 @@ export default {
             }
           )
         console.log(colors)
+        this.dominantColor = `rgb(${colors[0].rgb[0]}, ${colors[0].rgb[1]}, ${colors[0].rgb[2]})`
         this.radialimg = `radial-gradient(circle at 20% 50%, rgba(${colors[0].rgb[0]}, ${colors[0].rgb[1]}, ${colors[0].rgb[2]}, 0.98) 0%, rgba(${colors[1].rgb[0]}, ${colors[1].rgb[1]}, ${colors[1].rgb[2]}, 0.88) 100%)`
       } catch (err) {
         console.log(err)
@@ -137,6 +144,11 @@ export default {
   .detail_brief {
     position: relative;
   }
+  .detail_mark {
+    position: absolute;
+    left: 3.7692rem;
+    bottom: 0.3846rem;
+  }
   .detail_bg_img {
     content: '';
     position: absolute;
@@ -161,15 +173,16 @@ export default {
     background-color: rgb(12, 12, 12);
     margin-top: 1.5rem;
     .detail_bg_radial {
+      padding: 1.1538rem 0.7692rem 2.3077rem;
       position: relative;
       display: flex;
       .detail_img {
-        @include wh(2.95rem, 4.4231rem);
+        @include wh(3.4615rem, 5.1923rem);
       }
       .detail_progress {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 1.1538rem;
+        right: 0.3rem;
       }
       .brief_container {
         margin-left: 1.5rem;
@@ -178,8 +191,9 @@ export default {
         justify-content: center;
         .brief_title {
           @include sc(0.6rem, #fff);
+          width: 5rem;
           padding: 0;
-          margin: 0
+          margin: 0;
         }
         .brief_date {
           @include sc(0.3rem, #666);
@@ -188,6 +202,7 @@ export default {
         }
         .brief_genres {
           @include sc(0.3rem, #666);
+          width: 5rem;
           padding: 0;
           margin: 0
         }
@@ -202,26 +217,21 @@ export default {
   .detail_nav {
     position: relative;
     height: 1.7308rem;
+    background-color: #232323;
     .detail_nav_container {
       @include center;
+      width: 100%;
+      height: 100%;
       display: flex;
       .detial_button {
-        @include wh(2.7692rem, 0.9615rem);
-        @include sc(0.3rem, rgb(182, 182, 182));
+        @include sc(0.4rem, #fff);
+        font-weight: bold;
+        line-height: 1.7308rem;
         margin: 0;
         padding: 0;
-        background-color: rgb(12, 12, 12);
-        border: 2px solid rgb(182, 182, 182)
-      }
-      .overview {
-        @include borderRadius(0.2rem 0 0 0.2rem)
-      }
-      .people {
-        border-left: none;
-        border-right: none;
-      }
-      .similar {
-        @include borderRadius(0 0.2rem 0.2rem 0)
+        text-align: center;
+        flex-grow: 1;
+        border-bottom: 0.1923rem solid #232323;
       }
     }
   }

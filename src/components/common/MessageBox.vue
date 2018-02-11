@@ -1,12 +1,24 @@
 <template>
   <div class="box_container">
     <div class="msg_container">
-      <span class="msg_title">{{ title }}</span>
-      <p class="msg_content">{{ message }}</p>
-      <div class="msg_button_container">
+      <slot name="title">
+        <span class="msg_title">themoviedb.org</span>
+      </slot>
+      <slot name='content'>
+        <p class="msg_content">
+          Please login to themoviedb.org to manage your favorites, watchlists and ratings straight from within the app. It's completely free to register.
+        </p>
+      </slot>
+      <slot name='customBtn'>
+        <div class="msg_button_container">
+          <button @click="cancel" class="msg_button_cancel">Cancel</button>
+          <button @click="login($route.path)" class="msg_button_login">Login</button>
+        </div>
+      </slot>
+      <!-- <div class="msg_button_container" v-if="defaultBtn">
         <button @click="cancel" class="msg_button_cancel">Cancel</button>
         <button @click="login($route.path)" class="msg_button_login">Login</button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -14,23 +26,19 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  props: {
-    title: {
-      type: String,
-      default: 'themoviedb.org'
-    },
-    message: {
-      type: String,
-      default: 'Please login to themoviedb.org to manage your favorites, watchlists and ratings straight from within the app. It\'s completely free to register.'
-    }
-  },
+  // props: {
+  //   defaultBtn: {
+  //     type: Boolean,
+  //     default: true
+  //   }
+  // },
   methods: {
-    cancel () {
-      this.$emit('closeMsg')
-    },
     ...mapActions({
       login: 'changeRequestToken'
-    })
+    }),
+    cancel () {
+      this.$emit('closeMsg')
+    }
   }
 }
 </script>
@@ -57,12 +65,12 @@ export default {
     justify-content: space-around;
     align-items: center;
     .msg_title {
-      font-size: 0.7rem;
+      @include sc(0.7rem, #000);
       font-weight: bold;
       margin-bottom: 20px;
     }
     .msg_content {
-      font-size: 0.5rem;
+      @include sc(0.5rem, #000);
       text-align: justify;
     }
   }

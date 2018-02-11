@@ -4,7 +4,7 @@
       <span slot="title" class="search_title">Search</span>
     </Head>
     <div class="input_container">
-      <input type="text" placeholder=" Search Movie" v-model="search" class="search_input" />
+      <input type="text" placeholder=" Search Movie" v-model="search" v-stream:keyup="{ subject: enter$, data: search }" class="search_input" />
     </div>
     <ul class="search_list">
       <li v-for="item in results" :key="item.id" class="search_item" @click="$router.push('/movie/' + item.id)">
@@ -30,7 +30,9 @@ import Vue from 'vue'
 import VueRx from 'vue-rx'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
+import { Subject } from 'rxjs/Subject'
 import 'rxjs/add/observable/fromPromise'
+import 'rxjs/add/observable/fromEvent'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/operator/filter'
@@ -40,6 +42,7 @@ import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/catch'
+import 'rxjs/add/operator/merge'
 import { getSearchResult } from '../../utils/getData'
 import Head from '../header/Head'
 import Foot from '../footer/Foot'
@@ -49,7 +52,8 @@ import { imgurl } from '../../utils/imgurl'
 
 Vue.use(VueRx, {
   Observable,
-  Subscription
+  Subscription,
+  Subject
 })
 
 const formatResult = (res) => res.results
@@ -81,12 +85,14 @@ export default {
     Icon,
     Star
   },
+  domStreams: ['enter$'],
   subscriptions () {
     return {
       results: this.$watchAsObservable('search')
         .pluck('newValue')
         .filter(text => text.length > 2)
         .debounceTime(750)
+        .merge(this.enter$.filter(source => source.event.keyCode === 13).pluck('data').filter(text => text))
         .distinctUntilChanged()
         .switchMap(value => Observable.fromPromise(getSearchResult(value))
           .catch(err => Observable.of(new Error(err)))

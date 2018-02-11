@@ -20,7 +20,7 @@
       <Icon name='user'></Icon>
       <span>My TMDb</span>
     </section>
-    <MessageBox v-if="loginstate" @closeMsg="doclose"/>
+    <MessageBox v-if="showMsg" @closeMsg="doClose"/>
   </footer>
 </template>
 
@@ -31,7 +31,7 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      loginstate: false
+      showMsg: false
     }
   },
   computed: {
@@ -47,13 +47,12 @@ export default {
     judgeLoginState () {
       this.accesstoken
         ? this.$router.push('/account')
-        : this.loginstate = true
+        : this.showMsg = true
     },
-    doclose () {
-      this.loginstate = false
+    doClose () {
+      this.showMsg = false
     }
   }
-
 }
 </script>
 

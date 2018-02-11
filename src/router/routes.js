@@ -5,7 +5,7 @@ const Detail = () => import('../components/pages/Detail')
 const Overview = () => import('../components/pages/Detail-overview')
 const People = () => import('../components/pages/Detail-people')
 const Similar = () => import('../components/pages/Detail-similar')
-const Account = () => import('../components/pages/Account')
+const Account = () => import('../components/pages/Account/Account')
 
 export default [
   {
@@ -20,23 +20,26 @@ export default [
   },
   {
     path: '/movie/:id',
-    name: 'Movie',
     component: Detail,
     children: [
       {
         path: '',
+        name: 'Default',
         component: Overview
       },
       {
         path: 'overview',
+        name: 'Overview',
         component: Overview
       },
       {
         path: 'people',
+        name: 'People',
         component: People
       },
       {
         path: 'similar',
+        name: 'Similar',
         component: Similar
       }
     ]

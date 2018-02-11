@@ -20,7 +20,6 @@ export default {
       required: true
     }
   },
-  // props: ['rating'],
   components: {
     Icon
   }
@@ -31,7 +30,6 @@ export default {
   @import '../../style/mixin';
   .star{
     position: relative;
-    // top: .2rem;
     @include wh(2rem, .4rem);
     .star_cover{
       overflow: hidden;

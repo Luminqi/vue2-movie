@@ -14,8 +14,21 @@ export const getMovieInfo = () => Promise.all([
 export const getSearchResult = (query) => fetch(baseurl + '/search/movie', { api_key, query, page: '1' })
 export const getMovieDetail = (movieId) => fetch(
   baseurl + '/movie/' + movieId, { api_key, append_to_response: 'videos,images,similar,reviews,credits' })
-export const createRequestToken = () => fetch(
-  baseurl_v4 + '/auth/request_token', { redirect_to: 'http://localhost:8080/#/account' }, 'post', { 'Authorization': 'Bearer ' + api_access_token })
+
+// v3 auth API
+export const createRequestTokenV3 = () => fetch(baseurl + '/authentication/token/new', { api_key })
+export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}?redirect_to=http://localhost:8080/account`
+// export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}`
+export const createSessionId = (request_token) => fetch(baseurl + '/authentication/session/new', { api_key, request_token })
+// export const getAccountInfo = (session_id) => Promise.all([
+//   fetch(baseurl + '/account/lists', { api_key, session_id, page: '1' }),
+//   fetch(baseurl + '/account/favorite/movies', {api_key, session_id, sort_by: 'created_at.asc', page: '1'}),
+//   fetch(baseurl + '/account/watchlist/movies', {api_key, session_id, sort_by: 'created_at.asc', page: '1'})
+// ])
+
+// v4 auth API
+export const createRequestToken = (requestToken_v3) => fetch(
+  baseurl_v4 + '/auth/request_token', { redirect_to: permissionURL(requestToken_v3) }, 'post', { 'Authorization': 'Bearer ' + api_access_token })
 export const createAccessToken = (requestToken) => fetch(
   baseurl_v4 + '/auth/access_token', { "request_token": requestToken }, 'post', { 'Authorization': 'Bearer ' + api_access_token })
 export const getUserInfo = (accountId, accessToken) => Promise.all([
@@ -24,3 +37,40 @@ export const getUserInfo = (accountId, accessToken) => Promise.all([
   fetch(baseurl_v4 + '/account/' + accountId + '/movie/recommendations', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken }),
   fetch(baseurl_v4 + '/account/' + accountId + '/movie/watchlist', { page: '1' }, 'get', { 'Authorization': 'Bearer ' + accessToken })
 ])
+
+export const addToFavorite = (session_id, media_type, media_id) => fetch(
+  baseurl + `/account/{account_id}/favorite?api_key=${api_key}&session_id=${session_id}`,
+  {
+    media_type,
+    media_id,
+    'favorite': true
+  },
+  'post'
+)
+export const removeFromFavorite = (session_id, media_type, media_id) => fetch(
+  baseurl + `/account/{account_id}/favorite?api_key=${api_key}&session_id=${session_id}`,
+  {
+    media_type,
+    media_id,
+    'favorite': false
+  },
+  'post'
+)
+export const addToWatchlist = (session_id, media_type, media_id) => fetch(
+  baseurl + `/account/{account_id}/watchlist?api_key=${api_key}&session_id=${session_id}`,
+  {
+    media_type,
+    media_id,
+    'watchlist': true
+  },
+  'post'
+)
+export const removeFromWatchlist = (session_id, media_type, media_id) => fetch(
+  baseurl + `/account/{account_id}/watchlist?api_key=${api_key}&session_id=${session_id}`,
+  {
+    media_type,
+    media_id,
+    'watchlist': false
+  },
+  'post'
+)

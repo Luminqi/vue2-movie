@@ -85,7 +85,36 @@ export const rateMovie = (session_id, movie_id, value) => fetch(
 )
 
 export const deleteRating = (session_id, movie_id) => fetch(
-  baseurl + `/movie/${movie_id}/rating`,
-  { api_key, session_id},
+  baseurl + `/movie/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+  {},
   'delete'
 ) 
+
+export const addItemToList = (list_id, access_token, media_type, media_id) => fetch(
+  baseurl_v4 + `/list/${list_id}/items`,
+  {
+    'items': [
+      {
+        media_type,
+        media_id
+      }
+    ]
+  },
+  'post',
+  { 'Authorization': 'Bearer ' + access_token }
+)
+
+
+export const removeItemFromList = (list_id, access_token, media_type, media_id) => fetch(
+  baseurl_v4 + `/list/${list_id}/items`,
+  {
+    'items': [
+      {
+        media_type,
+        media_id
+      }
+    ]
+  },
+  'delete',
+  { 'Authorization': 'Bearer ' + access_token }
+)

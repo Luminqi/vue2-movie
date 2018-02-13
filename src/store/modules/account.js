@@ -1,9 +1,9 @@
-import { MODIFY_REQUEST_TOKEN, MODIFY_ACCESS_TOKEN, MODIFY_ACCOUNT_ID,
-  CHANGE_ACCOUNT_INFO, CHANGE_START_PATH, MODIFY_REQUEST_TOKEN_V3,
-  MODIFY_SESSION_ID, ADD_FAVORITE_MOVIE, REMOVE_FAVORITE_MOVIE,
-  ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE, ADD_RATED_MOVIE, DELETE_RATED_MOVIE
+import { MODIFY_REQUEST_TOKEN, MODIFY_ACCESS_TOKEN, MODIFY_ACCOUNT_ID, CHANGE_ACCOUNT_INFO,
+  CHANGE_START_PATH, MODIFY_REQUEST_TOKEN_V3, MODIFY_SESSION_ID, ADD_FAVORITE_MOVIE,
+  REMOVE_FAVORITE_MOVIE, ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE, ADD_RATED_MOVIE,
+  DELETE_RATED_MOVIE, ADD_LIST_ITEM, REMOVE_LIST_ITEM
 } from '../mutation-Types'
-import { createRequestToken, createAccessToken, getUserInfo, createRequestTokenV3, createSessionId } from '../../utils/getData'
+import { createRequestToken, createAccessToken, getUserInfo, createRequestTokenV3, createSessionId, addItemToList, removeItemFromList } from '../../utils/getData'
 import { setStore } from '../../utils/storage'
 import { imgurl } from '../../utils/imgurl'
 const formatUserInfo = (res) => {
@@ -49,7 +49,9 @@ const formatUserInfo = (res) => {
     path: imgurl('w92', item.poster_path),
     title: item.title,
     release_date: item.release_date,
-    rating: item.account_rating.value
+    rating: item.account_rating.value,
+    vote_average: item.vote_average,
+    vote_count: item.vote_count
     // rating_date: item.account_rating.created_at
   }))
   return { lists, favorites, recommendations, watchlist, rated }
@@ -114,6 +116,24 @@ export default {
     },
     [DELETE_RATED_MOVIE] (state, payload) {
       state.rated = state.rated.filter(item => item.id !== payload.id)
+    },
+    [ADD_LIST_ITEM] (state, payload) {
+      state.lists.forEach(item => {
+        if (item.id === payload.id) {
+          item.itemcount++
+        }
+      })
+    },
+    [REMOVE_LIST_ITEM] (state, payload) {
+      state.lists = state.lists.map(
+        item => {
+          if (item.id === payload.id) {
+            return { ...item, itemcount: item.itemcount-- }
+          } else {
+            return item
+          }
+        }
+      )
     }
   },
   actions: {
@@ -146,6 +166,22 @@ export default {
       let data = formatUserInfo(res)
       console.log(data)
       commit(CHANGE_ACCOUNT_INFO, data)
+    },
+    async addMovieToList ({ commit }, { listId, accessToken, movieId }) {
+      let res = await addItemToList(listId, accessToken, 'movie', movieId)
+      // let id = res.results[0].media_id
+      let success = res.results[0].success
+      if (success) {
+        commit(ADD_LIST_ITEM, { id: listId })
+      }
+    },
+    async removeMovieFromList ({ commit }, { listId, accessToken, movieId }) {
+      let res = await removeItemFromList(listId, accessToken, 'movie', movieId)
+      // let id = res.results[0].media_id
+      let success = res.results[0].success
+      if (success) {
+        commit(REMOVE_LIST_ITEM, { id: listId })
+      }
     }
   }
 }

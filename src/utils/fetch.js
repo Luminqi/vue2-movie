@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async (url = '', data = {}, type = 'get', header = {}) => {
   type = type.toLowerCase()
-  if (type === 'get' || type === 'delete') {
+  if (type === 'get') {
     let dataStr = ''
     Object.keys(data).forEach(key => {
       dataStr += key + '=' + data[key] + '&'
@@ -27,7 +27,7 @@ export default async (url = '', data = {}, type = 'get', header = {}) => {
   // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
   // - Browser only: FormData, File, Blob
   // - Node only: Stream, Buffer
-  if (type === 'post') {
+  if (type === 'post' || type === 'delete') {
     config = { ...config, data: data }
   }
   try {

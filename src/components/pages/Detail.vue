@@ -19,7 +19,7 @@
         </div>
         <Progress :percentage="movie.vote_average * 10" :width="60" :strokeWidth="6" class="detail_progress" v-if="finishGetDetail"></Progress>
       </div>
-      <MarkBundle :dominantColor="dominantColor" class="detail_mark" v-if="showMarkBundle"></MarkBundle>
+      <MarkBundle :dominantColor="dominantColor" :movieDetail="movie" class="detail_mark" v-if="showMarkBundle"></MarkBundle>
     </section>
     <section class="detail_nav">
       <div class="detail_nav_container">

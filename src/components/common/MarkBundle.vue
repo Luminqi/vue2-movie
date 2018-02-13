@@ -21,22 +21,28 @@
     </div>
     <div class="rate container" @click="activeMark('rate')">
       <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" stroke="#fff" stroke-width="10" :style="getCircleStyle('rate')" class="circle"/>
+        <circle cx="50" cy="50" r="45" stroke="#fff" stroke-width="10" :style="rateCircleStyle" class="circle"/>
       </svg>
-      <Icon name="star" :style="getIconStyle('rate')"></Icon>
+      <Icon name="star" :style="rateIconStyle"></Icon>
     </div>
   </div>
   <MessageBox v-if="showMsg" @closeMsg="doClose" class="msgbox">
     <span slot="title" v-if="msgTitle">{{ msgTitle }}</span>
     <div slot="content" v-if="activeList">
-      <p>{{ this.msgContent }}</p>
+      <p>Add The Commuter to one of your lists...</p>
+      <ul v-if="lists.length">
+        <li v-for="item in lists" :key="item.id" @click="addToList(item.id)">
+          {{item.name}} ({{item.count}} items)
+        </li>
+      </ul>
     </div>
     <div slot="content" v-if="activeRate">
       <Rate :max="5" :rating="rating" ref="rateStar"></Rate>
     </div>
     <div slot="customBtn" v-if="accessToken">
-      <button @click="cancel">Cancel</button>
-      <button @click="submit">Submit</button>
+      <button @click="quit">Quit</button>
+      <button @click="submit" v-if="activeRate">Submit</button>
+      <button @click="removeRating" v-if="activeRate">Delete</button>
     </div>
   </MessageBox>
   </div>
@@ -46,7 +52,7 @@
 import Icon from './Icon'
 import MessageBox from './MessageBox'
 import Rate from './Rate'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { addToFavorite, removeFromFavorite, addToWatchlist, removeFromWatchlist, rateMovie, deleteRating } from '../../utils/getData'
 import { ADD_FAVORITE_MOVIE, REMOVE_FAVORITE_MOVIE, ADD_WATCHLIST_MOVIE, REMOVE_WATCHLIST_MOVIE, ADD_RATED_MOVIE, DELETE_RATED_MOVIE } from '../../store/mutation-Types'
 export default {
@@ -55,11 +61,12 @@ export default {
       clickedElm: '',
       showMsg: false,
       msgTitle: '',
-      msgContent: '',
       favorIconStyle: {},
       favorCircleStyle: {},
       wlistIconStyle: {},
       wlistCircleStyle: {},
+      rateCircleStyle: {},
+      rateIconStyle: {},
       rating: 0
     }
   },
@@ -75,7 +82,11 @@ export default {
       favorMovieIds: state => state.account.favorites.map(item => item.id),
       watchlistIds: state => state.account.watchlist.map(item => item.id),
       ratedMovie: state => state.account.rated,
-      movieDetail: state => state.detail.moviedetail
+      lists: state => state.account.lists.map(item => ({
+        id: item.id,
+        name: item.name,
+        count: item.itemcount
+      }))
     }),
     briefMovieDetail () {
       // eslint-disable-next-line
@@ -102,7 +113,14 @@ export default {
   props: {
     dominantColor: {
       type: String,
-      require: true
+      default: '#ff8800'
+    },
+    movieDetail: {
+      type: Object,
+      required: true,
+      validator (item) {
+        return item.id && item.poster && item.title && item.release_date && item.vote_average && item.vote_count !== undefined
+      }
     }
   },
   methods: {
@@ -114,6 +132,9 @@ export default {
       addRatedMovie: ADD_RATED_MOVIE,
       deleteRatedMovie: DELETE_RATED_MOVIE
     }),
+    ...mapActions([
+      'addMovieToList'
+    ]),
     getCircleStyle (mark) {
       return this.clickedElm === mark ? { fill: '#fff' } : { fill: 'none' }
     },
@@ -125,19 +146,16 @@ export default {
       if (!this.accessToken) {
         this.showMsg = true
         this.msgTitle = ''
-        this.msgContent = ''
       } else {
         switch (elm) {
           case 'list': {
             this.showMsg = true
             this.msgTitle = 'Add to List'
-            this.msgContent = 'Add The Commuter to one of your lists...'
             break
           }
           case 'rate': {
             this.showMsg = true
             this.msgTitle = 'Rate it!'
-            this.msgContent = ''
             break
           }
           case 'favorite': {
@@ -183,41 +201,57 @@ export default {
           default: {
             this.showMsg = false
             this.msgTitle = ''
-            this.msgContent = ''
           }
         }
       }
     },
+    addToList (listId) {
+      this.addMovieToList({ listId, accessToken: this.accessToken, movieId: this.movieDetail.id })
+    },
     doClose () {
       this.showMsg = false // defaultBtn cancel feature
     },
-    cancel () {
+    quit () {
       this.showMsg = false
-      if (this.activeList) {
-      }
       if (this.activeRate) {
-        this.$refs.rateStar.initialValue()
+        if (this.$refs.rateStar.getCurValue() > 0 && !this.ratedMovie.map(item => item.id).includes(this.movieDetail.id)) {
+          this.rating = 0
+        }
         this.clickedElm = ''
+      }
+    },
+    removeRating () {
+      this.showMsg = false
+      if (this.ratedMovie.map(item => item.id).includes(this.movieDetail.id)) {
+        deleteRating(this.sessionId, this.movieDetail.id).then(
+          () => {
+            this.rating = 0
+            this.rateIconStyle = { fill: '#fff', width: '0.6154rem', height: '0.6154rem' }
+            this.rateCircleStyle = { fill: 'none' }
+            this.deleteRatedMovie({ id: this.briefMovieDetail.id })
+          }
+        )
       }
     },
     submit () {
       this.showMsg = false
-      if (this.activeRate) {
-        let value = this.$refs.rateStar.getCurValue()
-        rateMovie(this.sessionId, this.movieDetail.id, value).then(
-          () => {
-            // eslint-disable-next-line
-            const { id, path, title, release_date } = this.briefMovieDetail
-            this.addRatedMovie({
-              id,
-              path,
-              title,
-              release_date,
-              rating: value
-            })
-          }
-        )
-      }
+      let value = this.$refs.rateStar.getCurValue() * 2
+      rateMovie(this.sessionId, this.movieDetail.id, value).then(
+        () => {
+          this.rating = value / 2
+          this.rateIconStyle = { fill: '#FAEF3A', width: '0.4615rem', height: '0.4615rem' }
+          this.rateCircleStyle = { fill: '#fff' }
+          // eslint-disable-next-line
+          const { id, path, title, release_date } = this.briefMovieDetail
+          this.addRatedMovie({
+            id,
+            path,
+            title,
+            release_date,
+            rating: value
+          })
+        }
+      )
     },
     initialStyle () {
       if (this.favorMovieIds.includes(this.movieDetail.id)) {
@@ -236,8 +270,12 @@ export default {
       }
       if (this.ratedMovie.map(item => item.id).includes(this.movieDetail.id)) {
         this.rating = this.ratedMovie.filter(item => item.id === this.movieDetail.id)[0].rating / 2
+        this.rateIconStyle = { fill: '#FAEF3A', width: '0.4615rem', height: '0.4615rem' }
+        this.rateCircleStyle = { fill: '#fff' }
       } else {
         this.rating = 0
+        this.rateIconStyle = { fill: '#fff', width: '0.6154rem', height: '0.6154rem' }
+        this.rateCircleStyle = { fill: 'none' }
       }
     }
   },
@@ -262,5 +300,8 @@ export default {
         // @include wh(16.0004px, 16.0004px);
       }
     }
+  }
+  .msgbox {
+    color: #000;
   }
 </style>

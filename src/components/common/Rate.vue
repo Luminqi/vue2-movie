@@ -32,9 +32,6 @@ export default {
     getIconStyle (num) {
       return num <= this.currentValue ? { fill: '#FAEF3A' } : { fill: '#AAAAAA' }
     },
-    initialValue () {
-      this.currentValue = 0
-    },
     getCurValue () {
       return this.currentValue
     }

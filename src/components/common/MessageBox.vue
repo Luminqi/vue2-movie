@@ -15,10 +15,6 @@
           <button @click="login($route.path)" class="msg_button_login">Login</button>
         </div>
       </slot>
-      <!-- <div class="msg_button_container" v-if="defaultBtn">
-        <button @click="cancel" class="msg_button_cancel">Cancel</button>
-        <button @click="login($route.path)" class="msg_button_login">Login</button>
-      </div> -->
     </div>
   </div>
 </template>
@@ -26,12 +22,6 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  // props: {
-  //   defaultBtn: {
-  //     type: Boolean,
-  //     default: true
-  //   }
-  // },
   methods: {
     ...mapActions({
       login: 'changeRequestToken'

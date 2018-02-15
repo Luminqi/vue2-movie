@@ -55,10 +55,12 @@ export default {
   },
   computed: {
     slides () {
-      return this.$store.getters[this.type] || this.$store.state.detail.moviedetail[this.type]
+      return this.$store.getters[this.type] ||
+        this.$store.state.detail.moviedetail[this.type] ||
+        this.$store.state.people.peopledetail[this.type]
     },
     judgeType () {
-      return this.type !== 'cast' && this.type !== 'crew' && this.type !== 'trailers'
+      return this.type !== 'cast' && this.type !== 'crew'
     }
   },
   props: {
@@ -93,7 +95,7 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .nowplaying, .upcoming, .toprated, .cast, .crew, .similar {
+  .nowplaying, .upcoming, .toprated, .cast, .crew, .similar, .knownforcast, .knownforcrew {
     img, .default_pic_container {
       @include wh(2.95rem, 4.4231rem);
     }

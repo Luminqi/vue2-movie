@@ -14,7 +14,9 @@ export const getMovieInfo = () => Promise.all([
 export const getSearchResult = (query) => fetch(baseurl + '/search/movie', { api_key, query, page: '1' })
 export const getMovieDetail = (movieId) => fetch(
   baseurl + '/movie/' + movieId, { api_key, append_to_response: 'videos,images,similar,reviews,credits' })
-
+export const getPeopleDetail = (personId) => fetch(
+  baseurl + '/person/' + personId, { api_key, append_to_response: 'movie_credits'}
+)
 // v3 auth API
 export const createRequestTokenV3 = () => fetch(baseurl + '/authentication/token/new', { api_key })
 export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}?redirect_to=http://localhost:8080/account`

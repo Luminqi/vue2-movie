@@ -4,7 +4,10 @@
     <section class="detail_brief">
       <div class="detail_bg_img" :class="{ 'lazyloaded': lazyloaded }" :style="{ backgroundImage: backdrop}"></div>
       <div class="detail_bg_radial" :style="{ backgroundImage: radialimg}">
-        <img :src="movie.poster" alt="" class="detail_img" />
+        <img :src="movie.poster" alt="" class="detail_img" v-if="movie.poster" />
+        <div class="default_pic_container" v-else>
+          <Icon name="picture" class="default_pic"></Icon>
+        </div>
         <div class="brief_container">
           <p class="brief_title">{{ movie.title }}</p>
           <p class="brief_date">{{ movie.release_date }}</p>
@@ -37,6 +40,7 @@
 import Head from '../header/Head'
 import Foot from '../footer/Foot'
 import Star from '../common/Star'
+import Icon from '../common/Icon'
 import Progress from '../common/Progress'
 import MarkBundle from '../common/MarkBundle'
 import { mapState, mapActions } from 'vuex'
@@ -64,7 +68,8 @@ export default {
     Foot,
     Star,
     Progress,
-    MarkBundle
+    MarkBundle,
+    Icon
   },
   methods: {
     changeNav (nav) {
@@ -189,8 +194,17 @@ export default {
       padding: 1.1538rem 0.7692rem 2.3077rem;
       position: relative;
       display: flex;
-      .detail_img {
+      .detail_img, .default_pic_container {
         @include wh(3.4615rem, 5.1923rem);
+      }
+      .default_pic_container {
+        position: relative;
+        background-color: #443d3d;
+      }
+      .default_pic {
+        @include wh(1rem, 1rem);
+        @include center;
+        fill: rgb(170, 170, 170);
       }
       .detail_progress {
         position: absolute;

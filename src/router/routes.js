@@ -6,6 +6,7 @@ const Overview = () => import('../components/pages/Detail-overview')
 const People = () => import('../components/pages/Detail-people')
 const Similar = () => import('../components/pages/Detail-similar')
 const Account = () => import('../components/pages/Account/Account')
+const Person = () => import('../components/pages/People')
 
 export default [
   {
@@ -43,6 +44,11 @@ export default [
         component: Similar
       }
     ]
+  },
+  {
+    path: '/person/:id',
+    name: 'Person',
+    component: Person
   },
   {
     path: '/account',

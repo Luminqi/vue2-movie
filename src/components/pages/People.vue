@@ -1,6 +1,6 @@
 <template>
   <div class="people">
-    <Head :headback="true"></Head>
+    <Head :headback="true" :load="loading"></Head>
     <section class="people_brief">
       <img :src="people.profile" v-if="people.profile" class="people_profile" />
       <div class="default_pic_container" v-else>
@@ -18,7 +18,9 @@
     </section>
     <section class="people_knownfor">
       <p class="knownfor_title">Known For</p>
+      <p class="people_cast" v-if="people.knownforcast.length">Cast</p>
       <Swipe type="knownforcast"></Swipe>
+      <p class="people_crew" v-if="people.knownforcrew.length">Crew</p>
       <Swipe type="knownforcrew"></Swipe>
     </section>
     <Foot></Foot>
@@ -32,6 +34,11 @@ import Icon from '../common/Icon'
 import Swipe from '../common/Swipe'
 import { mapState, mapActions } from 'vuex'
 export default {
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapState({
       people: state => state.people.peopledetail
@@ -49,7 +56,10 @@ export default {
     ])
   },
   created () {
-    this.getPeopleInfo(this.$route.params.id)
+    this.loading = true
+    this.getPeopleInfo(this.$route.params.id).then(() => {
+      this.loading = false
+    })
   }
 }
 </script>
@@ -109,6 +119,9 @@ export default {
     border-top: 1px solid #5a5656;
     .knownfor_title {
       @include sc(0.6rem, #fff);
+    }
+    .people_cast, .people_crew {
+      @include sc(0.4rem, #fff);
     }
   }
 }

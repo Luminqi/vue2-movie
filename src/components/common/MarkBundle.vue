@@ -27,22 +27,22 @@
     </div>
   </div>
   <MessageBox v-if="showMsg" @closeMsg="doClose" class="msgbox">
-    <span slot="title" v-if="msgTitle">{{ msgTitle }}</span>
-    <div slot="content" v-if="activeList">
+    <span slot="title" v-if="msgTitle" class="msg_title">{{ msgTitle }}</span>
+    <div slot="content" v-if="activeList" class="msg_content">
       <p>Add The Commuter to one of your lists...</p>
       <ul v-if="lists.length">
         <li v-for="item in lists" :key="item.id" @click="addToList(item.id)">
-          {{item.name}} ({{item.count}} items)
+          <span class="list_name">{{item.name}}</span> ({{item.count}} items)
         </li>
       </ul>
     </div>
-    <div slot="content" v-if="activeRate">
+    <div slot="content" v-if="activeRate" class="msg_rate">
       <Rate :max="5" :rating="rating" ref="rateStar"></Rate>
     </div>
-    <div slot="customBtn" v-if="accessToken">
-      <button @click="quit">Quit</button>
-      <button @click="submit" v-if="activeRate">Submit</button>
-      <button @click="removeRating" v-if="activeRate">Delete</button>
+    <div slot="customBtn" v-if="accessToken" class="btn_container">
+      <div @click="quit" class="btn_quit button">Quit</div>
+      <div @click="submit" v-if="activeRate" class="btn_submit button">Submit</div>
+      <div @click="removeRating" v-if="activeRate" class="btn_remove button">Delete</div>
     </div>
   </MessageBox>
   </div>
@@ -302,6 +302,35 @@ export default {
     }
   }
   .msgbox {
-    color: #000;
+    .msg_title {
+      @include sc(0.7rem, #000);
+    }
+    .msg_content {
+      @include sc(0.5rem, #000);
+      .list_name {
+        text-decoration: underline;
+      }
+    }
+    .msg_rate {
+      height: 80px;
+      margin-top: -80px;
+    }
+    .btn_container {
+      width: 11.5385rem;
+      border-top: 1px solid black;
+      display: flex;
+      .button {
+        @include sc(0.6rem, rgb(81, 71, 223));
+        font-weight: bold;
+        height: 1.1538rem;
+        flex-grow: 1;
+        text-align: center;
+        line-height: 1.1538rem;
+      }
+      .btn_submit {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+      }
+    }
   }
 </style>

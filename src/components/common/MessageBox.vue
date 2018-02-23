@@ -11,8 +11,8 @@
       </slot>
       <slot name='customBtn'>
         <div class="msg_button_container">
-          <button @click="cancel" class="msg_button_cancel">Cancel</button>
-          <button @click="login($route.path)" class="msg_button_login">Login</button>
+          <div @click="cancel" class="msg_button_cancel button">Cancel</div>
+          <div @click="login($route.path)" class="msg_button_login button">Login</div>
         </div>
       </slot>
     </div>
@@ -45,23 +45,38 @@ export default {
   }
   .msg_container {
     @include wh(11.5385rem, 7.6923rem);
-    padding: 20px;
+    padding: 20px 20px 0;
     box-sizing: border-box;
     @include center;
     background-color: rgba(255,255,255,1);
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     .msg_title {
       @include sc(0.7rem, #000);
       font-weight: bold;
-      margin-bottom: 20px;
     }
     .msg_content {
       @include sc(0.5rem, #000);
       text-align: justify;
+    }
+    .msg_button_container {
+      width: 11.5385rem;
+      border-top: 1px solid black;
+      display: flex;
+      .button {
+        font-size: 0.6rem;
+        font-weight: bold;
+        height: 1.1538rem;
+        flex-grow: 1;
+        text-align: center;
+        line-height: 1.1538rem;
+      }
+      .msg_button_cancel {
+        border-right: 1px solid black;
+      }
     }
   }
 </style>

@@ -106,7 +106,6 @@ export const addItemToList = (list_id, access_token, media_type, media_id) => fe
   { 'Authorization': 'Bearer ' + access_token }
 )
 
-
 export const removeItemFromList = (list_id, access_token, media_type, media_id) => fetch(
   baseurl_v4 + `/list/${list_id}/items`,
   {
@@ -117,6 +116,27 @@ export const removeItemFromList = (list_id, access_token, media_type, media_id) 
       }
     ]
   },
+  'delete',
+  { 'Authorization': 'Bearer ' + access_token }
+)
+
+export const getList = (list_id, access_token) => fetch(
+  baseurl_v4 + `/list/${list_id}`, { page: '1' }, 'get', { 'Authorization': 'Bearer ' + access_token }
+)
+
+export const createList = (name, access_token) => fetch(
+  baseurl_v4 + '/list', 
+  {
+    name,
+    "iso_639_1": "en"
+  },
+  'post',
+  { 'Authorization': 'Bearer ' + access_token }
+)
+
+export const deleteList = (list_id, access_token) => fetch(
+  baseurl_v4 + `/list/${list_id}`,
+  {},
   'delete',
   { 'Authorization': 'Bearer ' + access_token }
 )

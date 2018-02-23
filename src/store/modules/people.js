@@ -10,23 +10,13 @@ const formatData = (data) => {
     id: item.id,
     title: item.title,
     date: item.release_date
-  })).reduce((array, cur) => {
-    if (!array.map(item => item.id).includes(cur.id)) {
-      array.push(cur)
-    }
-    return array
-  }, [])
+  }))
   const knownforcrew = data.movie_credits.crew.map(item => ({
     path: imgurl('w92', item.poster_path),
     id: item.id,
     title: item.title,
     date: item.release_date
-  })).reduce((array, cur) => {
-    if (!array.map(item => item.id).includes(cur.id)) {
-      array.push(cur)
-    }
-    return array
-  }, [])
+  }))
   return {
     id,
     name,
@@ -49,6 +39,32 @@ export default {
       biography: '',
       knownforcast: [],
       knownforcrew: []
+    }
+  },
+  getters: {
+    knownforcast: state => {
+      let arr = state.peopledetail.knownforcast
+      if (arr.length > 10) {
+        arr = arr.slice(0, 10)
+      }
+      return arr.reduce((array, cur) => {
+        if (!array.map(item => item.id).includes(cur.id)) {
+          array.push(cur)
+        }
+        return array
+      }, [])
+    },
+    knownforcrew: state => {
+      let arr = state.peopledetail.knownforcrew
+      if (arr.length > 10) {
+        arr = arr.slice(0, 10)
+      }
+      return arr.reduce((array, cur) => {
+        if (!array.map(item => item.id).includes(cur.id)) {
+          array.push(cur)
+        }
+        return array
+      }, [])
     }
   },
   mutations: {

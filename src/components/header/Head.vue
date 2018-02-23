@@ -4,16 +4,19 @@
     <Icon name='goback' v-if="headback" @click.native="goback"></Icon>
     <slot name='title'></slot>
     <slot name='rightside'></slot>
+    <Loading class="loading" :isLoading="load"></Loading>
   </header>
 </template>
 
 <script>
 import Icon from '../common/Icon'
+import Loading from '../common/Loading'
 import { CHANGE_START_PATH } from '../../store/mutation-Types'
 import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
-    Icon
+    Icon,
+    Loading
   },
   computed: {
     ...mapState({
@@ -26,6 +29,10 @@ export default {
       default: false
     },
     headback: {
+      type: Boolean,
+      default: false
+    },
+    load: {
       type: Boolean,
       default: false
     }
@@ -50,10 +57,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
- @import '../../style/mixin';
+  @import '../../style/mixin';
   .head {
     position: fixed;
     top: 0;
+    left: 0;
     z-index: 100;
     @include wh(100%, 1.5rem);
     background-color: rgba(0, 0, 0, 0.8);
@@ -70,5 +78,9 @@ export default {
   .icon_goback {
     fill: white;
     @include wh(1rem, 1rem);
+  }
+  .loading {
+    position: absolute;
+    bottom: 0;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <Head :headback="true"></Head>
+    <Head :headback="true" :load="loading"></Head>
     <section class="detail_brief">
       <div class="detail_bg_img" :class="{ 'lazyloaded': lazyloaded }" :style="{ backgroundImage: backdrop}"></div>
       <div class="detail_bg_radial" :style="{ backgroundImage: radialimg}">
@@ -48,6 +48,7 @@ import * as Vibrant from 'node-vibrant'
 export default {
   data () {
     return {
+      loading: false,
       lazyloaded: false,
       radialimg: '',
       dominantColor: '#ff8800',
@@ -131,7 +132,9 @@ export default {
   },
   created () {
     console.log('from create')
+    this.loading = true
     this.getDetailAndPalette(this.$route.params.id).then(() => {
+      this.loading = false
       this.lazyloaded = true
       this.finishGetDetail = true
     })
@@ -143,11 +146,13 @@ export default {
   //   next()
   // },
   beforeRouteUpdate (to, from, next) {
-    console.log('from beforerouteUpdate')
+    console.log('from beforeRouteUpdate')
     if (to.params.id !== from.params.id) {
+      this.loading = true
       this.lazyloaded = false
       this.finishGetDetail = false
       this.getDetailAndPalette(to.params.id).then(() => {
+        this.loading = false
         this.lazyloaded = true
         this.finishGetDetail = true
       })

@@ -56,8 +56,7 @@ export default {
   computed: {
     slides () {
       return this.$store.getters[this.type] ||
-        this.$store.state.detail.moviedetail[this.type] ||
-        this.$store.state.people.peopledetail[this.type]
+        this.$store.state.detail.moviedetail[this.type]
     },
     judgeType () {
       return this.type !== 'cast' && this.type !== 'crew'

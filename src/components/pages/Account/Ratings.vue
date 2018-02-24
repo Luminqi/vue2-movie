@@ -1,7 +1,7 @@
 <template>
   <div class="rated">
     <!-- <transition-group name="list" tag="ul" class="wathclist_list"> -->
-    <ul>
+    <ul class="rated_list">
       <li v-for="item in rated" :key="item.id" class="rated_item">
         <img :src="item.path" v-if="item.path"  @click="$router.push('/movie/' + item.id)" class="item_pic">
         <div class="default_pic_container" v-else>

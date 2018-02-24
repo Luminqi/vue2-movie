@@ -19,7 +19,7 @@ export default {
         id: item.id,
         title: item.title,
         date: item.release_date
-      })),
+      })).slice(0, 6),
     nowplaying: state => state.movieinfo.nowplaying
       .filter(item => item.poster_path !== null)
       .map(item => ({

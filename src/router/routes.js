@@ -54,5 +54,9 @@ export default [
     path: '/account',
     name: 'Account',
     component: Account
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
 ]

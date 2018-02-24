@@ -67,7 +67,7 @@ export default {
       border-top: 1px solid black;
       display: flex;
       .button {
-        font-size: 0.6rem;
+        @include sc(0.6rem, rgb(81, 71, 223));
         font-weight: bold;
         height: 1.1538rem;
         flex-grow: 1;

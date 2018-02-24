@@ -1,7 +1,7 @@
 <template>
   <div class="watchlist">
     <!-- <transition-group name="list" tag="ul" class="wathclist_list"> -->
-    <ul>
+    <ul class="watchlist_list">
       <li v-for="item in watchlist" :key="item.id" class="watchlist_item">
         <img :src="item.path" v-if="item.path"  @click="$router.push('/movie/' + item.id)" class="item_pic">
         <div class="default_pic_container" v-else>

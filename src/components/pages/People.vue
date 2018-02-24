@@ -70,7 +70,7 @@ export default {
   color: white;
   background-color: rgb(12, 12, 12);
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
   .people_brief{
     padding: 1.1538rem 0.7692rem 2.3077rem;
     display: flex;

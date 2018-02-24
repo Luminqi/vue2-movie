@@ -19,7 +19,7 @@ export const getPeopleDetail = (personId) => fetch(
 )
 // v3 auth API
 export const createRequestTokenV3 = () => fetch(baseurl + '/authentication/token/new', { api_key })
-export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}?redirect_to=http://localhost:8080/account`
+export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}?redirect_to=http://movie.luminqi.com/%23account/`
 // export const permissionURL = (requsetToken) => `https://www.themoviedb.org/authenticate/${requsetToken}`
 export const createSessionId = (request_token) => fetch(baseurl + '/authentication/session/new', { api_key, request_token })
 // export const getAccountInfo = (session_id) => Promise.all([

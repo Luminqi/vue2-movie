@@ -3,7 +3,7 @@
   <Head :headlogo="true">
     <span slot="title" class='home_title'>Movie</span>
   </Head>
-  <Swipe :pagination="true" type="popular"></Swipe>
+  <Swipe type="popular"></Swipe>
   <div class="swipe_container">
     <p class="swipe_title">Now Playing</p>
     <Swipe type="nowplaying"></Swipe>

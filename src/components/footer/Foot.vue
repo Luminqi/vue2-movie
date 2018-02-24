@@ -64,6 +64,7 @@ export default {
     backdrop-filter: blur(15px);
     position: fixed;
     bottom: 0;
+    left: 0;
     z-index: 100;
     @include wh(100%, 1.5rem);
     padding: 0.25rem 0 0.1875rem;

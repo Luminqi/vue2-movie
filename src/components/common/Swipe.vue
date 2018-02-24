@@ -94,6 +94,20 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .popular {
+    img, .default_pic_container {
+      @include wh(11.6538rem, 6.5769rem);
+    }
+    .default_pic_container {
+      position: relative;
+      background-color: #443d3d;
+    }
+    .default_pic {
+      @include wh(1rem, 1rem);
+      @include center;
+      fill: rgb(170, 170, 170);
+    }
+  }
   .nowplaying, .upcoming, .toprated, .cast, .crew, .similar, .knownforcast, .knownforcrew {
     img, .default_pic_container {
       @include wh(2.95rem, 4.4231rem);

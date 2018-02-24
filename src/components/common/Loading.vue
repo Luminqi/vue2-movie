@@ -19,7 +19,6 @@ export default {
   @import '../../style/mixin';
   .load_container {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
     @include wh(100%, 4px);
   }
   .load_bar {

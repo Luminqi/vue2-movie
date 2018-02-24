@@ -1,21 +1,21 @@
-# vue2-movie
+# Vue2-movie
+[demo](http://movie.luminqi.com/)（Preview with chrome phone mode）
 
-> A Vue.js project
+## Technology
+vue2 + vuex + vue-router + axios + vue-awesome-swiper + node-vibrant
 
-## Build Setup
+## API
+from [TMDb](https://www.themoviedb.org/)
 
-``` bash
-# install dependencies
-npm install
+## Features
+- [x] Home page -- completed
+- [x] Movie detail page -- completed
+- [x] People detail page -- completed
+- [x] Search page -- completed
+- [x] Authenticated through TMDb -- completed
+- [x] Rate movie -- completed
+- [x] Add movie to favorites, watchlists, private lists -- completed
+- [ ] Account detail page -- working on it
+- [ ] TV series page -- working on it
 
-# serve with hot reload at localhost:8080
-npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
